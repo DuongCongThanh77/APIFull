@@ -4,7 +4,7 @@ using Data.ModelView;
 
 namespace Data.AutoMapper
 {
-    class ProfileMap : Profile
+  public  class ProfileMap : Profile
     {
         public ProfileMap()
         {

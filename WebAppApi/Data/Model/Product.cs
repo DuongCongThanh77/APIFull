@@ -26,6 +26,7 @@ namespace Data.Model
         public Product()
         {
             orderDetails = new List<OrderDetails>();
+            Category = new Category();
         }
 
         public int CategoryID { get; set; }
