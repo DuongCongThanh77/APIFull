@@ -16,6 +16,6 @@ namespace Service.Interface
         public Product Create(ProductView product);
         public Product Update(ProductView product,Guid ProductId);
         public void Delete(Guid id);
-
+        public List<Product> GetbySearch(string search);
     }
 }

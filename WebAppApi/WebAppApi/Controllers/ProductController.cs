@@ -21,7 +21,19 @@ namespace WebAppApi.Controllers
         {
             return Ok(this.productService.GetAll());
         }
-        [HttpGet("{id}")]
+        [HttpGet("Page/{page:int}")]
+        public IActionResult GetByPage(int page)
+        {
+            return Ok(this.productService.GetPage(page));
+        }
+
+        [HttpGet("Search/{search}")]
+        public IActionResult GetBySearch(string search)
+        {
+            return Ok(this.productService.GetbySearch(search));
+        }
+
+        [HttpGet("{id:Guid}")]
         public IActionResult GetProductById(Guid id)
         {
             if(this.productService.GetById(id) == null)

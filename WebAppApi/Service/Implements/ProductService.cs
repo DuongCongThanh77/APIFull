@@ -46,6 +46,11 @@ namespace Service.Implements
             return this.contexDb.Products.ToList();
         }
 
+        public List<Product> GetbySearch(string search)
+        {
+            return this.contexDb.Products.Where(p => p.ProductName.Contains(search)).ToList();
+        }
+
         public Product GetById(Guid id)
         {
             return this.contexDb.Products.SingleOrDefault(p=>p.ProductID == id);
