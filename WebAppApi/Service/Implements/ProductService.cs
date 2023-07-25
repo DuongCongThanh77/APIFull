@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Common.ExceptionHandle;
 using Data.ContexDb;
 using Data.Model;
 using Data.ModelView;
@@ -6,8 +7,6 @@ using Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service.Implements
 {
@@ -34,6 +33,11 @@ namespace Service.Implements
         public void Delete(Guid id)
         {
             Product p = this.contexDb.Products.SingleOrDefault(p => p.ProductID == id);
+            if (p == null)
+            {
+                throw new NotFoundException();
+             }
+            else
             this.contexDb.Products.Remove(p);
         }
 

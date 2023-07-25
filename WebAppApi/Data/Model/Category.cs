@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Data.Model
 {
@@ -8,6 +9,9 @@ namespace Data.Model
         public int CategoryID { get; set; }
         
         public string CategoryName { get; set; }
+
+        public ICollection<Product> Products { get; set; }
+
 
     }
 }

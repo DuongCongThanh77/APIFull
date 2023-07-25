@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Model
 {
-  public  class Product
+    public  class Product
     {
         [Key]
         public Guid ProductID { get; set; }
@@ -26,7 +23,6 @@ namespace Data.Model
         public Product()
         {
             orderDetails = new List<OrderDetails>();
-            Category = new Category();
         }
 
         public int CategoryID { get; set; }

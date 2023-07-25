@@ -25,13 +25,12 @@ namespace Data.ContexDb
             {
                 e.ToTable("Product");
                 e.HasIndex(e => e.ProductName).IsUnique();
+                e.HasOne(e => e.Category).WithMany(e => e.Products).HasForeignKey(e => e.CategoryID);
                 
             });
             modelBuilder.Entity<Category>(e =>
             {
                 e.ToTable("Category");
-                e.Property(e => e.CategoryID).ValueGeneratedOnAdd();
-
             });
             modelBuilder.Entity<User>(e =>
             {

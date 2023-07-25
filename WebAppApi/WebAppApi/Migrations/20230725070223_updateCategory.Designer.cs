@@ -4,14 +4,16 @@ using Data.ContexDb;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace WebAppApi.Migrations
 {
     [DbContext(typeof(SaleContexDb))]
-    partial class SaleContexDbModelSnapshot : ModelSnapshot
+    [Migration("20230725070223_updateCategory")]
+    partial class updateCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,17 +150,12 @@ namespace WebAppApi.Migrations
             modelBuilder.Entity("Data.Model.Product", b =>
                 {
                     b.HasOne("Data.Model.Category", "Category")
-                        .WithMany("Products")
+                        .WithMany()
                         .HasForeignKey("CategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Data.Model.Category", b =>
-                {
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Data.Model.Order", b =>
