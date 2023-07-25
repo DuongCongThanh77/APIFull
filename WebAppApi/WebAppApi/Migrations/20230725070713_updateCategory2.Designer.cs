@@ -4,14 +4,16 @@ using Data.ContexDb;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace WebAppApi.Migrations
 {
     [DbContext(typeof(SaleContexDb))]
-    partial class SaleContexDbModelSnapshot : ModelSnapshot
+    [Migration("20230725070713_updateCategory2")]
+    partial class updateCategory2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,6 +88,9 @@ namespace WebAppApi.Migrations
                     b.Property<int>("CategoryID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CategoryID1")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -100,6 +105,8 @@ namespace WebAppApi.Migrations
                     b.HasKey("ProductID");
 
                     b.HasIndex("CategoryID");
+
+                    b.HasIndex("CategoryID1");
 
                     b.HasIndex("ProductName")
                         .IsUnique();
@@ -148,17 +155,16 @@ namespace WebAppApi.Migrations
             modelBuilder.Entity("Data.Model.Product", b =>
                 {
                     b.HasOne("Data.Model.Category", "Category")
-                        .WithMany("Products")
+                        .WithMany()
                         .HasForeignKey("CategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
-                });
+                    b.HasOne("Data.Model.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoryID1");
 
-            modelBuilder.Entity("Data.Model.Category", b =>
-                {
-                    b.Navigation("Products");
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Data.Model.Order", b =>

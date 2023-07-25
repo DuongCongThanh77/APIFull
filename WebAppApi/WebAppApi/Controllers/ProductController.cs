@@ -1,17 +1,14 @@
-﻿using AutoMapper;
-using Data.ContexDb;
+﻿using Common.ExceptionHandle;
 using Data.ModelView;
 using Microsoft.AspNetCore.Mvc;
-using Service.Implements;
 using Service.Interface;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebAppApi.Controllers
 {
-    public class ProductController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ProductController : ControllerBase
     {
         public readonly IProductService productService;
 
@@ -19,15 +16,65 @@ namespace WebAppApi.Controllers
         {
             this.productService = productService;
         }
-        [HttpGet("GetProductAll")]
+        [HttpGet]
         public IActionResult Index()
         {
             return Ok(this.productService.GetAll());
-        } 
-        [HttpPost("CreateProduct")]
+        }
+        [HttpGet("{id}")]
+        public IActionResult GetProductById(Guid id)
+        {
+            if(this.productService.GetById(id) == null)
+            {
+                return NotFound();
+            }
+            return Ok(this.productService.GetById(id));
+        }
+        [HttpPost]
         public IActionResult Create(ProductView model)
         {
-            return Ok(this.productService.Create(model));
+            try
+            {
+                var Product = this.productService.Create(model);
+                return Ok(Product);
+            }
+            catch
+            {
+                return BadRequest();
+            }  
+        }
+        [HttpPut("{id}")]
+        public IActionResult Update(ProductView model, Guid id)
+        {
+            try
+            {
+                var Product = this.productService.Update(model,id);
+                return Ok(Product);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete( Guid id)
+        {
+            try
+            {
+                this.productService.Delete(id);
+                return Ok();
+            }
+            catch(NotFoundException e)
+            {
+               
+                return NotFound();
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(e);
+            }
         }
     }
 }

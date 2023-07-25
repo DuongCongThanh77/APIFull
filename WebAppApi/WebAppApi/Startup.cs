@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using Service.Implements;
 using Service.Interface;
 using Data.AutoMapper;
+using System.Linq;
 
 namespace WebAppApi
 {
@@ -29,7 +30,10 @@ namespace WebAppApi
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAppApi", Version = "v1" });
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
             });
+
+          
             services.AddAutoMapper(typeof(ProfileMap));
 
             services.AddDbContext<SaleContexDb>(opption => {
@@ -44,7 +48,10 @@ namespace WebAppApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
+                app.UseSwagger(c =>
+                {
+                    c.RouteTemplate = "/swagger/{documentName}/swagger.json";
+                });
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAppApi v1"));
             }
 
