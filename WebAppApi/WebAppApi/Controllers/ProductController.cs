@@ -1,5 +1,6 @@
 ﻿using Common.ExceptionHandle;
 using Data.ModelView;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Interface;
 using System;
@@ -48,6 +49,8 @@ namespace WebAppApi.Controllers
             return Ok(this.productService.GetById(id));
         }
         [HttpPost]
+        [Authorize]
+
         public IActionResult Create(ProductView model)
         {
             try
@@ -75,6 +78,8 @@ namespace WebAppApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
+
         public IActionResult Delete( Guid id)
         {
             try
@@ -85,7 +90,7 @@ namespace WebAppApi.Controllers
             catch(NotFoundException e)
             {
                
-                return NotFound();
+                return NotFound(e);
             }
             catch (Exception e)
             {

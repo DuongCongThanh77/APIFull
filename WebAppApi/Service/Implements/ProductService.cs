@@ -39,6 +39,7 @@ namespace Service.Implements
              }
             else
             this.contexDb.Products.Remove(p);
+            this.contexDb.SaveChanges();
         }
 
         public List<Product> GetAll()

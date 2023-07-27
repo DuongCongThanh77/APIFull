@@ -10,6 +10,11 @@ using Service.Implements;
 using Service.Interface;
 using Data.AutoMapper;
 using System.Linq;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using WebAppApi.Model;
 
 namespace WebAppApi
 {
@@ -25,7 +30,21 @@ namespace WebAppApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            var secretkey = Configuration["Appsettings:Secretkey"];
+            var secretkeyBytes = Encoding.UTF8.GetBytes(secretkey);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
+            {
+                opt.TokenValidationParameters = new TokenValidationParameters
+                {
+                    // tu cap token
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    // ky vao token
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(secretkeyBytes),
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -39,7 +58,9 @@ namespace WebAppApi
             services.AddDbContext<SaleContexDb>(opption => {
                 opption.UseSqlServer(Configuration.GetConnectionString("SaleDB"),b => b.MigrationsAssembly("WebAppApi"));
             });
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddScoped<IProductService, ProductSevice>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +80,7 @@ namespace WebAppApi
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
