@@ -24,6 +24,11 @@ namespace WebAppApi.Controllers
         [HttpGet("Page/{page:int}")]
         public IActionResult GetByPage(int page)
         {
+            if(this.productService.GetPage(page).Count ==0 )
+            {
+                return NotFound();
+            }
+         
             return Ok(this.productService.GetPage(page));
         }
 
