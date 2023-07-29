@@ -14,6 +14,13 @@ namespace Service.Interface
         public User Login(UserView user);
         public List<UserView> GetUser();
 
+        public User GetUser(Guid userId);
+        public RefreshToken AddReFreshToken(RefreshToken refreshToken);
+        public bool UpdateReFreshToken(RefreshToken refreshToken);
+
+        public bool CheckReFreshToken(string refreshToken);
+        public RefreshToken GetReFreshToken(string refreshToken);
+
         public AppSettings getAppSettings();
 
     }

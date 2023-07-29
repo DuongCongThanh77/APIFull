@@ -119,11 +119,41 @@ namespace Service.Implements
             return new List<UserView>();
         }
 
+
+
         public User Login(UserView user)
         {
             var User = saleContexDb.Users.SingleOrDefault(u => u.UserName == user.UserName && u.Password == user.Password);
             return User;
         
+        }
+
+        public RefreshToken AddReFreshToken(RefreshToken refreshToken)
+        {
+            this.saleContexDb.RefreshToken.Add(refreshToken);
+            this.saleContexDb.SaveChanges();
+            return refreshToken;
+        }
+
+        public bool CheckReFreshToken(string refreshToken)
+        {
+            return !(this.saleContexDb.RefreshToken.SingleOrDefault(x => x.Token == refreshToken) == null);
+        }
+
+        public RefreshToken GetReFreshToken(string refreshToken)
+        {
+           return this.saleContexDb.RefreshToken.SingleOrDefault(x => x.Token == refreshToken);
+        }
+
+        public User GetUser(Guid userId)
+        {
+            return this.saleContexDb.Users.FirstOrDefault(x => x.UserID == userId);
+        }
+
+        public bool UpdateReFreshToken(RefreshToken refreshToken)
+        {
+            this.saleContexDb.RefreshToken.Update(refreshToken);
+            return true;
         }
     }
 }
