@@ -12,6 +12,7 @@ namespace Service.Interface
   public  interface IUserService
     {
         public User Login(UserView user);
+        public List<UserView> GetUser();
 
         public AppSettings getAppSettings();
 

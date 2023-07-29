@@ -4,12 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Service.Interface;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace WebAppApi.Controllers
 {
@@ -22,8 +20,13 @@ namespace WebAppApi.Controllers
         {
             this.userService = UserService;
         }
+        [HttpGet]
+        public IActionResult GETdata()
+        {
+            return Ok(userService.GetUser());
+        } 
 
-        [HttpPost]
+            [HttpPost]
         public IActionResult Index(UserView user)
         {
             var u = userService.Login(user);
@@ -35,7 +38,15 @@ namespace WebAppApi.Controllers
             {
                 //cap token
                 string token = GenarateToken(u);
-                return Ok(new ApiResponse { Success = true, Message = "Well come!", Data = new { token= token, refreshtoken=""}  });
+                var random = new byte[32];
+                string refreshtoken;
+                    using (var rng = RandomNumberGenerator.Create())
+                {
+                    rng.GetBytes(random);
+                    refreshtoken = Convert.ToBase64String(random);
+                }
+                    
+                return Ok(new ApiResponse { Success = true, Message = "Well come!", Data = new { token= token, refreshtoken= refreshtoken }  });
             }
         }
 
@@ -53,7 +64,7 @@ namespace WebAppApi.Controllers
 
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(SecretKeyByte),SecurityAlgorithms.HmacSha256)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(SecretKeyByte),SecurityAlgorithms.HmacSha256Signature)
             };
             var token = jwtTokenHandle.CreateToken(tokenDescription);
             return jwtTokenHandle.WriteToken(token);
